@@ -81,6 +81,10 @@ async def shutdown_event():
 from app.routes.flow import router
 app.include_router(router, prefix="/api/flows", tags=["Flows"])
 
+from app.routes.stream import stream_router
+app.include_router(stream_router, prefix="/api/stream", tags=["Stream"])
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
