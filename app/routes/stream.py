@@ -2,7 +2,6 @@ from fastapi import APIRouter, Body
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
-import asyncio
 from app.services.llm_service import stream_llm
 
 stream_router = APIRouter()
@@ -11,19 +10,6 @@ stream_router = APIRouter()
 class StreamRequest(BaseModel):
     user_input: str
     provider: Optional[str] = "gemini"  # "gemini" or "openai"
-
-
-async def event_stream():
-    """Demo event stream"""
-    for i in range(5):
-        yield f"data: message {i}\n\n"
-        await asyncio.sleep(1)
-
-
-@stream_router.get("/sse")
-async def sse():
-    """Demo SSE endpoint"""
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
 @stream_router.post("/chat")

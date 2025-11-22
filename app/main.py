@@ -5,6 +5,8 @@ Main FastAPI application entry point
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.routes.flow import flow_router
+from app.routes.stream import stream_router
 
 # Khởi tạo FastAPI app
 app = FastAPI(
@@ -59,15 +61,12 @@ async def startup_event():
     print(f"🔧 ReDoc: http://localhost:8000/redoc")
     
     # Kiểm tra cấu hình
-    if not settings.OPENAI_API_KEY:
-        print("⚠️  Warning: OPENAI_API_KEY chưa được cấu hình")
-    else:
-        print("✅ OpenAI API đã được cấu hình")
+    if not settings.OPENAI_API_KEY or not  settings.GEMINI_API_KEY:
+        if not settings.OPENAI_API_KEY:
+            print("⚠️ OPENAI_API_KEY not configured")
+        else:
+            print("⚠️ GEMINI_API_KEY not configured")
         
-    if not settings.GEMINI_API_KEY:
-        print("⚠️  Warning: GEMINI_API_KEY chưa được cấu hình")
-    else:
-        print("✅ Gemini API đã được cấu hình")
 
 # Shutdown event
 @app.on_event("shutdown")
@@ -77,12 +76,9 @@ async def shutdown_event():
     """
     print("👋 Chatbot Flow Server đang tắt...")
 
-# Thêm các router cho flows, services, etc. ở đây
-from app.routes.flow import router
-app.include_router(router, prefix="/api/flows", tags=["Flows"])
 
-from app.routes.stream import stream_router
-app.include_router(stream_router, prefix="/api/stream", tags=["Stream"])
+app.include_router(flow_router, prefix="/api", tags=["Flows"])
+app.include_router(stream_router, prefix="/api", tags=["Stream"])
 
 
 if __name__ == "__main__":

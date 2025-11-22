@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Body
 from pydantic import BaseModel
-from typing import Dict
 from app.flows.question_chatbot import run_test_workflow
 
-router = APIRouter()
+flow_router = APIRouter()
 
-class AskRequest(BaseModel):
+class FlowRequest(BaseModel):
     user_input: str
 
-@router.post("/ask")
-async def ask_question(request: AskRequest = Body(...)):
+@flow_router.post("/ask")
+async def ask_question(request: FlowRequest = Body(...)):
     """
     Simple API that runs a test workflow calling Gemini.
     
