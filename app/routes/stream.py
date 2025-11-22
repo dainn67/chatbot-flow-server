@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Body, Query
+from fastapi import APIRouter, Body
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
 import asyncio
-import json
-from app.flows.stream_test_flow import run_stream_test_workflow
+from app.services.llm_service import stream_llm
 
 stream_router = APIRouter()
 
@@ -43,7 +42,7 @@ async def stream_chat(request: StreamRequest = Body(...)):
     data: {"chunk": "", "done": true}
     """
     return StreamingResponse(
-        llm_event_stream(request.user_input, request.provider),
+        stream_llm(request.provider, request.user_input),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
