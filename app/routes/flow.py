@@ -1,27 +1,24 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
 from pydantic import BaseModel
-from app.flows.question_chatbot import run_test_workflow
+from app.flows.question_chatbot import run_test_workflow, run_single_question
 
-flow_router = APIRouter()
+router = APIRouter()
 
-class FlowRequest(BaseModel):
+class QuestionRequest(BaseModel):
     user_input: str
 
-@flow_router.post("/ask")
-async def ask_question(request: FlowRequest = Body(...)):
+@router.post("/ask")
+async def ask_question(request: QuestionRequest):
     """
     Simple API that runs a test workflow calling Gemini.
-    
-    Example request body:
-    {
-        "user_input": "Xin chào, bạn có khỏe không?"
-    }
     """
-    try:
-        result = await run_test_workflow(request.user_input)
-        return result
-    except Exception as e:
-        return {
-            "error": str(e),
-            "message": "Có lỗi xảy ra khi xử lý request. Vui lòng kiểm tra API key hoặc cấu hình."
-        }
+    result = await run_test_workflow(request.user_input)
+    return result
+
+@router.post("/ask-single")
+async def ask_single_question(request: QuestionRequest):
+    """
+    Simple API that runs a single question workflow.
+    """
+    result = await run_single_question(request.user_input)
+    return result

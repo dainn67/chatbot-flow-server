@@ -57,8 +57,8 @@ async def startup_event():
     Chạy khi server khởi động
     """
     print("🚀 Chatbot Flow Server đang khởi động...")
-    print(f"📝 Docs: http://localhost:8000/docs")
-    print(f"🔧 ReDoc: http://localhost:8000/redoc")
+    print(f"📝 Docs: http://localhost:3000/docs")
+    print(f"🔧 ReDoc: http://localhost:3000/redoc")
     
     # Kiểm tra cấu hình
     if not settings.OPENAI_API_KEY or not  settings.GEMINI_API_KEY:
@@ -86,6 +86,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
-        port=8000,
+        port=3000,
         reload=True
     )
