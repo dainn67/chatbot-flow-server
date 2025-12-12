@@ -1,4 +1,4 @@
-from app.services.openai_service import call_gpt, stream_gpt
+from app.services.openai_service import call_gpt
 from app.services.gemini_service import call_gemini, stream_gemini
 from typing import AsyncGenerator
 
