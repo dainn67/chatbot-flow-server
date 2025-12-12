@@ -5,8 +5,9 @@ Main FastAPI application entry point
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routes.flow import flow_router
-from app.routes.stream import stream_router
+from app.routes.stream_router import stream_router
+from app.routes.chat_flow_router import chat_flow_router
+from app.routes.single_question_router import single_question_router
 
 # Khởi tạo FastAPI app
 app = FastAPI(
@@ -77,8 +78,9 @@ async def shutdown_event():
     print("👋 Chatbot Flow Server đang tắt...")
 
 
-app.include_router(flow_router, prefix="/api", tags=["Flows"])
-app.include_router(stream_router, prefix="/api", tags=["Stream"])
+app.include_router(stream_router, prefix="/api/stream", tags=["Stream"])
+app.include_router(chat_flow_router, prefix="/api/chat-flow", tags=["Chat Flow"])
+app.include_router(single_question_router, prefix="/api/single-question", tags=["Single Question"])
 
 
 if __name__ == "__main__":

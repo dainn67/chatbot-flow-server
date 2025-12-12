@@ -6,13 +6,12 @@ from app.services.llm_service import stream_llm
 
 stream_router = APIRouter()
 
-
 class StreamRequest(BaseModel):
     user_input: str
     provider: Optional[str] = "gemini"  # "gemini" or "openai"
 
 
-@stream_router.post("/chat")
+@stream_router.post("/ask")
 async def stream_chat(request: StreamRequest = Body(...)):
     """
     Stream chat response from LLM using Server-Sent Events (SSE).
