@@ -10,10 +10,8 @@ async def call_gpt(prompt: str, model: str = "gpt-4o-mini"):
         input=prompt
     )
 
-    # Extract text output
-    message_json = json.loads(completion.output_text.replace('```json', '').replace('```', ''))
-
     # Extract tokens exactly following your API's response schema
+    output_text = completion.output_text
     usage = completion.usage
 
     token_logs = {
@@ -23,7 +21,6 @@ async def call_gpt(prompt: str, model: str = "gpt-4o-mini"):
     }
 
     return {
-        "id": message_json.get("id"),
-        "reason": message_json.get("reason"),
+        "message": output_text,
         "token_logs": token_logs
     }
