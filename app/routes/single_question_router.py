@@ -40,3 +40,18 @@ async def analyze_progress(request: QuestionRequest = Body(...)):
         "analyzed_progress": analyzed_progress,
         "token_logs": token_logs
     }
+
+@single_question_router.post("/analyze-result")
+async def analyze_result(request: QuestionRequest = Body(...)):
+    """
+    Analyze the result of finished test.
+    """
+    result = await run_llm(request.provider, request.user_input)
+
+    analyzed_result = result.get("message")
+    token_logs = result.get("token_logs")
+
+    return {
+        "analyzed_result": analyzed_result,
+        "token_logs": token_logs
+    }
